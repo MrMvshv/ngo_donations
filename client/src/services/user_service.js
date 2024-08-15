@@ -20,7 +20,13 @@ export function LoginUser(email, pass) {
   };
 
   return fetch(LOGIN_ROUTE, options).then((response) => {
-    if (!response.ok) throw Error({ msg: response.statusText });
+    console.log(`Received response with status: ${response.status}`);
+    
+    if (!response.ok) {
+      return response.json().then((error) => {
+        throw new Error(error.message || response.statusText);
+      });
+    }
 
     return response.json();
   });
